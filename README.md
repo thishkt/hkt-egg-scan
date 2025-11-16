@@ -29,12 +29,13 @@
 - **資料匯入**：從 JSON 檔案匯入條碼資料
 - **資料重置**：一鍵清除所有資料
 
-## 🚀 快速開始
+## 🚀 如何使用
 
-### 直接使用
-1. 下載專案檔案
-2. 使用瀏覽器開啟 `index.html`
-3. 首次使用時請接受免責聲明
+手機瀏覽器直接點擊開啟網址：
+[thishkt.github.io/hkt-egg-scan](thishkt.github.io/hkt-egg-scan)
+或是使用手機條碼相機掃描以下條碼：
+
+![QR Scanner](qrcode.png)
 
 ## 📱 使用說明
 
