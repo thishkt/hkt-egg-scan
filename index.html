@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>雞蛋超人</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <!-- 首頁 -->
+    <div id="homePage" class="page">
+        <div class="page-header">
+            <div class="header-content">
+                <h1 class="header-title">雞蛋超人</h1>
+            </div>
+        </div>
+        <div class="page-content">
+            <div class="home-container">
+                <img src="image.png" alt="系統圖片" class="home-logo">
+                <div class="home-buttons">
+                    <button id="startScanBtn" class="btn btn-primary">開始掃描</button>
+                    <button id="manageCodesBtn" class="btn btn-secondary">條碼管理</button>
+                    <button id="settingsBtn" class="btn btn-tertiary">設定</button>
+                    <div class="youtube-link-container">
+                        <a href="https://www.youtube.com/@CalvinHuo1004" target="_blank" class="youtube-link">
+                            Youtube 頻道：HKT線上教室
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 掃描頁面 -->
+    <div id="scanPage" class="page hidden">
+        <div class="page-header">
+            <div class="header-content">
+                <button class="back-btn" data-target="homePage">
+                    <svg class="back-icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M15 18L9 12L15 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                    <span>首頁</span>
+                </button>
+                <h1 class="header-title">掃描QR碼</h1>
+                <div class="header-placeholder"></div>
+            </div>
+        </div>
+        <div class="page-content">
+            <div class="scan-container">
+                <div class="video-container">
+                    <video id="video" autoplay playsinline></video>
+                    <div class="scan-overlay">
+                        <div class="scan-frame"></div>
+                        <p>將QR碼置於框內</p>
+                    </div>
+                </div>
+                <div class="scan-controls">
+                    <button id="torchBtn" class="control-btn">💡</button>
+                    <button id="cameraBtn" class="control-btn">🔄</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 掃描結果頁面 -->
+    <div id="resultPage" class="page hidden">
+        <div class="page-header">
+            <div class="header-content">
+                <button class="back-btn" data-target="scanPage">
+                    <svg class="back-icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M15 18L9 12L15 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                    <span>返回</span>
+                </button>
+                <h1 class="header-title">掃描結果</h1>
+                <div class="header-placeholder"></div>
+            </div>
+        </div>
+        <div class="page-content">
+            <div class="content-container">
+                <div id="resultCode" class="result-code"></div>
+                <div id="resultStatus" class="result-status"></div>
+                <div class="result-actions">
+                    <button id="newCodeBtn" class="btn btn-primary">新增條碼</button>
+                    <button id="backToScanBtn" class="btn btn-secondary">繼續掃描</button>
+                    <button id="backToHomeBtn2" class="btn btn-tertiary">返回首頁</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 條碼管理頁面 -->
+    <div id="managePage" class="page hidden">
+        <div class="page-header">
+            <div class="header-content">
+                <button class="back-btn" onclick="showPage('homePage')">
+                    <svg class="back-icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M15 18L9 12L15 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                    <span>首頁</span>
+                </button>
+                <h1 class="header-title">條碼管理</h1>
+                <div class="header-placeholder"></div>
+            </div>
+        </div>
+        <div class="page-content">
+            <div class="content-container">
+                <div class="search-container">
+                    <input type="text" id="searchInput" placeholder="搜尋條碼...">
+                </div>
+                <div class="manage-actions">
+                    <button id="addNewCodeBtn" class="btn btn-primary">新增條碼</button>
+                </div>
+                <div id="codeList" class="code-list"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 新增/編輯條碼頁面 -->
+    <div id="editPage" class="page hidden">
+        <div class="page-header">
+            <div class="header-content">
+                <button class="back-btn" onclick="showPage('managePage')">
+                    <svg class="back-icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M15 18L9 12L15 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                    <span>返回</span>
+                </button>
+                <h1 class="header-title" id="editTitle">新增條碼</h1>
+                <div class="header-placeholder"></div>
+            </div>
+        </div>
+        <div class="page-content">
+            <div class="content-container">
+                <div class="form-group">
+                    <label>條碼內容</label>
+                    <textarea id="codeContent" placeholder="輸入或掃描條碼內容"></textarea>
+                </div>
+                <div class="form-group">
+                    <label>自訂標籤</label>
+                    <input type="text" id="codeName" placeholder="輸入標籤名稱">
+                </div>
+                <div class="form-group">
+                    <label>備註</label>
+                    <textarea id="codeNote" placeholder="輸入備註"></textarea>
+                </div>
+                <div class="edit-actions">
+                    <button id="saveCodeBtn" class="btn btn-primary">儲存</button>
+                    <button id="cancelEditBtn" class="btn btn-secondary">取消</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 設定頁面 -->
+    <div id="settingsPage" class="page hidden">
+        <div class="page-header">
+            <div class="header-content">
+                <button class="back-btn" onclick="showPage('homePage')">
+                    <svg class="back-icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M15 18L9 12L15 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                    <span>首頁</span>
+                </button>
+                <h1 class="header-title">設定</h1>
+                <div class="header-placeholder"></div>
+            </div>
+        </div>
+        <div class="page-content">
+            <div class="content-container">
+                <div class="settings-options">
+                    <div class="setting-item">
+                        <label>自動比對</label>
+                        <input type="checkbox" id="autoCompare" checked>
+                    </div>
+                    <div class="setting-item">
+                        <label>音效提醒</label>
+                        <input type="checkbox" id="soundAlert" checked>
+                    </div>
+                    <div class="setting-item">
+                        <label>震動提醒</label>
+                        <input type="checkbox" id="vibrateAlert" checked>
+                    </div>
+                    <div class="setting-item">
+                        <label>掃描頻率</label>
+                        <select id="scanFrequency">
+                            <option value="100">高 (100ms)</option>
+                            <option value="200" selected>中 (200ms)</option>
+                            <option value="500">低 (500ms)</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="settings-actions">
+                    <button id="exportDataBtn" class="btn btn-primary">匯出資料</button>
+                    <button id="importDataBtn" class="btn btn-secondary">匯入資料</button>
+                    <input type="file" id="importFile" accept=".json" style="display: none;">
+                    <button id="resetDataBtn" class="btn btn-danger">重置資料</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 警示模態 -->
+    <div id="alertModal" class="modal hidden">
+        <div class="modal-content">
+            <h3 id="alertTitle"></h3>
+            <p id="alertMessage"></p>
+            <button id="closeAlertBtn" class="btn btn-primary">確定</button>
+        </div>
+    </div>
+
+    <!-- 確認對話框 -->
+    <div id="confirmModal" class="modal hidden">
+        <div class="modal-content">
+            <h3 id="confirmTitle"></h3>
+            <p id="confirmMessage"></p>
+            <div class="confirm-actions">
+                <button id="confirmYesBtn" class="btn btn-danger">是</button>
+                <button id="confirmNoBtn" class="btn btn-secondary">否</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 免責聲明模態 -->
+    <div id="disclaimerModal" class="modal">
+        <div class="modal-content">
+            <h1>🥚感謝您使用「雞蛋超人」！</h1>
+            <div class="disclaimer-content">
+                <p>在使用本系統前，請注意以下重要事項：</p>
+                <ul>
+                    <li><strong>⏳ 資料非即時更新：</strong>系統所提供之資訊可能有延遲或非最新狀態。</li>
+                    <li><strong>📚 僅供教學參考：</strong>系統內容僅作為教學或參考用途。</li>
+                    <li><strong>⚠️ 免責聲明：</strong>對於掃描結果本系統不負任何法律或實務上的責任。</li>
+                    <li><strong>☎️ 查證建議：</strong>完整且最新的正確資訊請參閱衛生福利部食品藥物管理署官方公告。</li>
+                </ul>
+                <p>繼續使用即表示您完全同意上述聲明。</p>
+            </div>
+            <div class="disclaimer-actions">
+                <button id="acceptDisclaimerBtn" class="btn btn-primary">我知道了</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://unpkg.com/jsqr@1.4.0/dist/jsQR.js"></script>
+    <script src="app.js"></script>
+</body>
+</html>
